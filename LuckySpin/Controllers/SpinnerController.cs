@@ -14,66 +14,72 @@ namespace LuckySpin.Controllers
     {
         private RepositoryService repoService;
 
-        /***
-         *  Constructor -  with RepositoryService DIJ
-         **/
+         //  --------------------------------- Constructor -  with RepositoryService DIJ -----------------------------
         public SpinnerController(RepositoryService repoService)
         {
             this.repoService = repoService;
         }
 
-        /***
-         * Index Action
-         **/
+         // ---------------------------------------------- Index Action ----------------------------------------------
         [HttpGet]
         public IActionResult Index()
         {
-                return View(); //Sends the empty Index form
+            return View(); //Sends the empty Index form
         }
-        
+
         [HttpPost]
-        public IActionResult Index(Player player) //TODO: Update Index() to receive form data as IndexViewModel
+        public IActionResult Index(Player player, IndexViewModel indexViewModel) //TODO: Update Index() to receive form data as IndexViewModel
         {
             if (!ModelState.IsValid) { return View(); } //Check for missing data
 
-            //TODO: Complete adding Player data to store in the repoService
-            repoService.Player = new Player
+            repoService.Player = new Player //adds Player data to store in the repoService
             {
-                //FirstName = indexVM.FirstName,
+                FirstName = indexViewModel.FirstName,
+                balance = indexViewModel.StartoutCash,
+                Luck = indexViewModel.PlayerLuck,
             };
 
             return RedirectToAction("Spin");
         }
 
-        /***
-         * Spin Action
-         **/  
-               
+        
+         // ---------------------------------------------- Spin Action -----------------------------------------------
+
         public IActionResult Spin() //Start a Spin WITHOUT data
         {
-         //CHARGE 
+            //CHARGE 
             // TODO: Load Player balance from the repoService
-            decimal balance;
 
+            decimal balance;
+            //balance =4.5;
             //TODO: Charge $0.50 to spin
 
 
-         //SPIN
+            //SPIN
             //TODO: Complete adding data to a new SpinViewModel to gather items for the View
+
             SpinViewModel spinVM = new SpinViewModel
             {
                 //CurrentBalance = string.Format(new CultureInfo("en-SG", false), "{0:C2}", balance),
             };
 
-         //GAMEPLAY
+            //GAMEPLAY
             //TODO: Check the Balance to see if the game is over
-
+            if (balance < 0) {
+                // end game somehow
+            } else if (true/* Spin.iswinning?*/) { 
+                balance -= 0;
+            }else
+                balance -= 0;
             //TODO: Pay $1.00 if Winning
 
 
-         //UPDATE DATA STORE
+            //UPDATE DATA STORE
             //TODO: Save balance to repoService
-
+            repoService.Player = new Player
+            {
+                balance = balance,
+            };
 
             //TODO: Use the repoService to add a spin to the repository
 
@@ -82,9 +88,9 @@ namespace LuckySpin.Controllers
         }
 
         //TODO: BONUS:  the LuckList
-        /***
-         * LuckList Action
-         **/
+        
+        //--------------------------------------------- LuckList Action ----------------------------------------------
+        
         [HttpGet]
         public IActionResult LuckList()
         {
@@ -93,4 +99,3 @@ namespace LuckySpin.Controllers
 
     }
 }
-

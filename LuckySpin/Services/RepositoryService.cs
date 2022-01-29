@@ -9,7 +9,8 @@ namespace LuckySpin.Services
         private List<Spin> spins = new List<Spin>();
 
         //Properties
-        public IEnumerable<Spin> PlayerSpins {
+        public IEnumerable<Spin> PlayerSpins
+        {
 
             get { return spins; }
         }
